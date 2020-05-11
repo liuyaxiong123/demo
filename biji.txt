@@ -1,0 +1,60 @@
+工作区   暂存区   仓库
+初始化仓库
+1. 直接远程克隆(空文件夹,克隆下来的项目直接就是仓库)
+(git clone git@github.com:jiasiqi521/demo.git)
+
+2. git init (自己初始化仓库,是否为空文件夹都可以)
+
+提交内容到仓库
+1. git add *        内容提交到了暂存区
+   (git rm <name> 将删除的文件提交到暂存区)
+(git add *.html  git add /test/  git add biji.txt)
+2. git commit -m 'message'  提交到仓库
+ 会生成commit
+配合一些指令做操作:
+git status  查看状态
+git checkout -- biji.txt  撤销工作区修改
+git restore biji.txt 撤销工作区修改
+git restore --staged biji.txt 撤销暂存区修改
+git log 打印全部的日志信息
+git log -1 打印最近一次提交 -2 最近两次
+git log --pretty=oneline 打印一行
+git log --oneline 打印一行
+git log --graph --pretty=oneline --abbrev-commit 
+打印详细的带分支的信息
+git config --global alias.lg 'log --graph --pretty=oneline --abbrev-commit'
+做一些全局的配置别名,可以简化git操作单词长度
+git tag -a v1.0 -m 'message' commit 打标签
+git reset --hard HEAD^ (git reset --hard commitID/v1.0/HEAD~50)
+版本回退(以当前HEAD指向的commitID进行回退)
+git reflog 查看历史的每一次操作
+
+
+远程关联
+git remote add origin git@github.com:jiasiqi521/demo.git 远程关联
+git remote 查看所有的远程仓库关联
+git remote -d originName  删除关联的仓库
+git push origin master (如果第一次推送需要添加  -u)
+
+配合文件:
+README.md   项目说明
+.gitignore  忽略特殊文件
+
+分支管理:
+git branch  查看分支列表
+git branch <name> 创建分支
+git checkout <name> / git switch <name> 切换分支
+git checkout -b <name> / git switch -c <name> 创建并切换到分支
+git merge <name> 合并分支(快进的方式进行合并)
+git merge --no-ff -m 'message' <name> 
+不以快进的方式进行合并(在合并时会把合并分支的这一步做一次commit提交)
+git branch -d <name> 删除分支
+git branch -D <name> 强制删除分支
+
+
+
+
+
+
+
+
