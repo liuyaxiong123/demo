@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+<meta name="author" content="TA" />
+    <title> 表单选中弹出框</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://lib.sinaapp.com/js/jquery/2.0.2/jquery-2.0.2.min.js"></script>
+    <script src="flex.js"></script>
+<style>
+    body,html,.wrap{
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .wrap{
+        padding: 40px 20px;
+    }
+    .box{
+        width: 100%;
+        height: 500px;
+    }
+    .diagnosisBox{
+        width: 100%;
+        height: 1600px;
+    }
+    .selectContent{
+        display: none;
+    }
+    .selectContent.show{
+        display: block;
+    }
+    .selectInput{
+        width: 100%;
+        height: 100px;
+        border: 1px solid #666666;
+    }
+</style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="box">
+            <input type="text" class="otherInput">
+        </div>
+        <div class="diagnosisBox">
+            <h3>diagnosis</h3>
+        </div>
+    </div>
+    <script>
+    (function(){
+        var Datalist = function(parent,data){
+            this.clickCount = 0;
+            this.data = data;
+            this.parent = parent;
+            this.inputEle = document.createElement('input');
+            this.ulEle = document.createElement('ul');
+            this.selectContent = document.createElement('div');
+            this.selectContent.style.width = '100%';
+            this.selectContent.style.height = '600px';
+            this.selectContent.style.overflow = 'scroll';
+            this.selectContent.style.border = '2px solid #666666';
+            this.selectContent.setAttribute('class','selectContent inDatalist');
+            this.inputEle.setAttribute('type','input');
+            this.inputEle.setAttribute('class','selectInput inDatalist');
+            this.ulEle.setAttribute('class','selectBox inDatalist');
+            this.ulEle.style.width='100%';
+            this.ulEle.style.height='100%';
+            this.selectContent.append(this.ulEle);
+            this.parent.append(this.inputEle);
+            this.parent.append(this.selectContent);
+            this.datalistItem(this.data);
+            this.inputClick();
+            this.closeSelectContent();
+            this.searchItem();
+        }
+        Datalist.prototype = {
+            datalistItem : function(data){
+                var self = this;
+                var itemList = ''; 
+                for (var i = 0; i < data.length; i++) {
+                    itemList += '<li class= "inDatalist liItem">'+data[i]+'</li>';
+                }
+                self.ulEle.innerHTML = itemList;              
+            },
+            inputClick : function(){
+                var self = this;
+                self.inputEle.addEventListener('click',function(){
+                    if (self.clickCount==0) { 
+                        self.clickCoun++;                      
+                        self.selectContent.classList.add('show');
+                    }
+                    self.parent.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"})
+                });         
+            },
+            closeSelectContent : function(){
+                var self = this;
+                document.documentElement.addEventListener('click',function(e){
+                    if(!e.target.classList.contains('inDatalist')){
+                        self.selectContent.classList.remove('show');                   
+                    }else if(e.target.classList.contains('liItem')){
+                        self.inputEle.value = e.target.innerHTML;
+                        self.selectContent.classList.remove('show');             
+                    };
+                })
+            },
+            searchItem : function(){
+                var self = this;
+                var keywords = ["Sun", "Mon", "Tue", "Wed", "Thu","qew", "gfgdg","xhgh", "chug", "Tfgdghu","xbujhjg", "Sat","cgfgd", "Weqed", "df", "Frxvxbi","ioiuo"];
+                var dataListKey = [];
+                self.inputEle.onkeyup = function(){
+                    var str = self.replaceIllegalStr(this.value);
+                    if (str == '') {
+                        self.datalistItem(dataListKey);
+                    } else {
+                        dataListKey = keywords.filter(keyword => {
+                            var reg = new RegExp(str,'g');
+                            return reg.test(keyword)
+                        });
+                        if (dataListKey.length>0) {
+                            self.datalistItem(dataListKey);
+                        }else{
+                            self.datalistItem(self.data);
+                        }   
+                    }
+                                    
+                }
+            },
+            replaceIllegalStr : function(str) {
+                var reg;
+                var illegal_list = ["/", "\\","[", "]","{", "}","<", ">","＜", "＞","「", "」","：", "；","、", "•","^", "'", "\"","\r", "\r\n", "\\n", "\n"];
+                for (var i = 0; i < illegal_list.length; i++) {
+                    if (str.indexOf(illegal_list[i]) >= 0) {
+                        if (illegal_list[i] == '\\' || illegal_list[i] == '[') {
+                            reg = new RegExp('\\' + illegal_list[i], "g");
+                        } else {
+                            reg = new RegExp(illegal_list[i], "g");
+                        }
+                    str = str.replace(reg, '');
+                    str = str.toString();
+                    }
+                }
+                return str.trim();
+            }
+        }
+        var parentEle = document.querySelector('.diagnosisBox');
+        var dataArr = [1,3,4,6,7,8];
+        var datalist = new Datalist(parentEle,dataArr);
+    })()   
+    </script>
+</body>
+</html>
