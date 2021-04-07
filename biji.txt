@@ -4,7 +4,7 @@ woshigoodman
 初始化仓库
 1. 直接远程克隆(空文件夹,克隆下来的项目直接就是仓库)
 (git clone git@github.com:jiasiqi521/demo.git)
-
+gsdag
 2. git init (自己初始化仓库,是否为空文件夹都可以)
 
 提交内容到仓库
